@@ -50,7 +50,8 @@ entity Seat {
 entity Showtime {
   *showtime_id : UUID
   --
-  start_time : datetime
+  show_date : date
+  show_time : time
 }
 
 
@@ -72,7 +73,8 @@ entity Booking {
 }
 
 entity BookingSeat {
-  *booking_seat_id : UUID
+  *showtime_id : UUID
+  *seat_id : UUID
   --
   price : int
 }

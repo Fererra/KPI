@@ -1,5 +1,6 @@
 type UUID = string;
-type DateTime = string;
+type DateISO = `${number}-${number}-${number}`; // YYYY-MM-DD
+type TimeISO = `${number}:${number}`; // HH:MM
 
 enum SeatType {
   STANDARD = "STANDARD",
@@ -49,7 +50,8 @@ interface Showtime {
   showtime_id: UUID;
   movie_id: UUID; // FK to Movie
   cinema_hall_id: UUID; // FK to CinemaHall
-  start_time: DateTime;
+  show_date: DateISO;
+  show_time: TimeISO;
 }
 
 interface Customer {
@@ -66,13 +68,12 @@ interface Booking {
   showtime_id: UUID; // FK to Showtime
   total_price: number;
   status: BookingStatus;
-  booking_date: DateTime;
+  booking_date: Date;
 }
 
 interface BookingSeat {
-  booking_seat_id: UUID;
-  booking_id: UUID; // FK to Booking
-  seat_id: UUID; // FK to Seat
   showtime_id: UUID; // FK to Showtime
+  seat_id: UUID; // FK to Seat
+  booking_id: UUID; // FK to Booking
   price: number;
 }
