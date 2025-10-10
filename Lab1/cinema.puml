@@ -82,19 +82,19 @@ entity BookingSeat {
 SeatType <.. Seat : uses
 BookingStatus <.. Booking : uses
 
-Movie "1" o-- "1..*" MovieGenre : has_genre 
-Genre "1" o-- "1..*" MovieGenre : classified_as
+MovieGenre "1..*" o-- "1" Movie : has_genre 
+MovieGenre "1..*" o-- "1" Genre : classified_as
  
-Movie "1" o-- "0..*" Showtime : is_shown_in
+Showtime "0..*" o-- "1" Movie : is_shown_in
 
 CinemaHall "1" *-- "1..*" Seat : contains
 CinemaHall "1" *-- "0..*" Showtime : hosts 
 
-Seat "1" o-- "0..*" BookingSeat : reserved_as
+Seat "1" *-- "0..*" BookingSeat : reserved_as
 Booking "1" *-- "1..*" BookingSeat : includes
 
-Showtime "1" o-- "0..*" Booking : has_booking
-Showtime "1" o-- "0..*" BookingSeat : has_reserved_seats
+Booking "0..*" o-- "1" Showtime : has_booking
+BookingSeat "0..*" o-- "1" Showtime : has_reserved_seats
 
-Customer "1" o-- "0..*" Booking : makes
+Booking "0..*" o-- "1" Customer : makes
 @enduml
