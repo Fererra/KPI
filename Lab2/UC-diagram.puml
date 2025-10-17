@@ -1,0 +1,101 @@
+@startuml
+left to right direction
+
+actor Administrator as A
+actor User as U
+
+usecase "UC1. View list of movies" as UC1
+usecase "UC2. View session schedule" as UC2
+usecase "UC3. View movie details" as UC3
+usecase "UC4. View hall information" as UC4
+usecase "UC5. View seat availability" as UC5
+
+usecase "UC6. Signup" as UC6
+usecase "UC7. Sign up using email and password" as UC7
+usecase "UC8. Sign up via third Google" as UC8
+
+usecase "UC9. Login" as UC9
+usecase "UC10. Log in using email and password" as UC10
+usecase "UC11. Log in via Google" as UC11
+
+usecase "UC12. Book seats" as UC12
+usecase "UC13. Make online booking" as UC13
+usecase "UC14. Make offline booking" as UC14
+
+usecase "UC15. Pay" as UC15
+usecase "UC16. Pay online" as UC16
+usecase "UC17. Pay on-site" as UC17
+
+usecase "UC18. View booking history" as UC18
+usecase "UC19. Request booking cancellation" as UC19
+usecase "UC20. Submit refund request" as UC20
+
+usecase "UC21. Manage movies and genres" as UC21
+usecase "UC22. Manage cinema halls" as UC22
+usecase "UC23. Schedule sessions" as UC23
+usecase "UC24. View all bookings" as UC24
+usecase "UC25. View booking statuses" as UC25
+
+usecase "UC26. Validate hall number and capacity uniqueness" as UC26
+usecase "UC27. Prevent overlapping showtimes in the same hall" as UC27
+usecase "UC28. Prevent double-booking of the same seat for the same showtime" as UC28
+usecase "UC29. Calculate total price" as UC29
+usecase "UC30. Release seats" as UC30
+
+A --> UC21
+A --> UC22
+A --> UC23
+A --> UC24
+A --> UC25
+
+U --> UC1
+U --> UC2
+U --> UC3
+U --> UC4
+U --> UC5
+U --> UC6
+U --> UC9
+U --> UC12
+U --> UC15
+U --> UC18
+U --> UC19
+U --> UC20
+
+UC1 ..> UC21 : <<include>>
+UC2 ..> UC1 : <<include>>
+UC2 ..> UC23 : <<include>>
+UC3 ..> UC1 : <<include>>
+UC3 ..> UC21 : <<include>>
+UC4 ..> UC2 : <<include>>
+UC4 ..> UC22 : <<include>>
+UC5 ..> UC4 : <<include>>
+UC5 ..> UC22 : <<include>>
+UC12 ..> UC5 : <<include>>
+UC12 ..> UC28 : <<include>>
+UC12 ..> UC29 : <<include>>
+UC13 ..> UC9 : <<include>>
+UC15 ..> UC29 : <<include>>
+UC16 ..> UC9 : <<include>>
+UC16 ..> UC13 : <<include>>
+UC17 ..> UC14 : <<include>>
+UC18 ..> UC9 : <<include>>
+UC19 ..> UC9 : <<include>>
+UC19 ..> UC18 : <<include>>
+UC19 ..> UC30 : <<include>>
+UC20 ..> UC9 : <<include>>
+UC20 ..> UC19 : <<include>>
+
+UC22 ..> UC26 : <<include>>
+UC23 ..> UC27 : <<include>>
+UC25 ..> UC24 : <<include>>
+
+UC6 <|-- UC7 : <<extend>>
+UC6 <|-- UC8 : <<extend>>
+UC9 <|-- UC10 : <<extend>>
+UC9 <|-- UC11 : <<extend>>
+UC12 <|-- UC13 : <<extend>>
+UC12 <|-- UC14 : <<extend>>
+UC15 <|-- UC16 : <<extend>>
+UC15 <|-- UC17 : <<extend>>
+
+@enduml
