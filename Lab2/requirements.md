@@ -23,21 +23,21 @@
 
 ### Non-Functional Requirements
 
-| ID        | Category                       | Requirement                                                                                                         |
-| --------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| **NFR1**  | Performance & Scalability      | The system must handle at least 100 concurrent users without noticeable performance degradation under normal load.  |
-| **NFR2**  | Performance & Scalability      | Average page load time should not exceed 2 seconds under normal network conditions.                                 |
-| **NFR3**  | Performance & Scalability      | Booking operations should complete within 3 seconds under normal load.                                              |
-| **NFR4**  | Security                       | All user passwords must be stored using strong hashing algorithms (e.g., bcrypt).                                   |
-| **NFR5**  | Security                       | The system must use HTTPS for all data transmission.                                                                |
-| **NFR6**  | Security                       | Access to administrative functions must be restricted to authorized users only.                                     |
-| **NFR7**  | Reliability & Data Integrity   | The system must ensure data consistency across all entities (no orphan bookings or seats).                          |
-| **NFR8**  | Reliability & Data Integrity   | The system must perform automated daily backups of all critical data.                                               |
-| **NFR9**  | Reliability & Data Integrity   | In case of a system failure, recovery must be possible within 1 hour.                                               |
-| **NFR10** | UX & Localization              | The user interface should be intuitive and support both desktop and mobile devices.                                 |
-| **NFR11** | UX & Localization              | The system should provide clear feedback for all successful and failed user actions.                                |
-| **NFR12** | Architecture & Maintainability | The system’s architecture should support adding new features (e.g., loyalty programs) with minimal code changes.    |
-| **NFR13** | Architecture & Maintainability | The codebase should follow clean code and layered architecture principles, ensuring modularity and maintainability. |
-| **NFR14** | Performance & Scalability      | The system should support horizontal scaling to handle increased user demand.                                       |
-| **NFR15** | UX & Localization              | The system should support multiple languages (e.g., English, Ukrainian).                                            |
-| **NFR16** | UX & Localization              | All date and time data must be stored in UTC and displayed according to the user’s local timezone.                  |
+| ID        | Category                       | Requirement                                                                                                                                                               |
+| --------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **NFR1**  | Performance & Scalability      | The system must remain stable and responsive when serving up to 1000 concurrent users under normal operating conditions, without noticeable performance degradation.      |
+| **NFR2**  | Performance & Scalability      | Average page load time should not exceed 2 seconds under typical broadband or stable Wi-Fi conditions with moderate latency and no significant packet loss.               |
+| **NFR3**  | Performance & Scalability      | Booking operations should complete within 3 seconds under normal load, defined as up to 1000 concurrent users performing typical browsing and booking actions.            |
+| **NFR4**  | Security                       | All user passwords must be stored using strong, industry-recommended hashing algorithms such as Argon2id or scrypt, in accordance with OWASP Password Storage guidelines  |
+| **NFR5**  | Security                       | The system must use HTTPS for all data transmission.                                                                                                                      |
+| **NFR6**  | Security                       | Access to administrative functions must be restricted to authorized users only.                                                                                           |
+| **NFR7**  | Reliability & Data Integrity   | The system must ensure data consistency across all entities (no orphan bookings or seats).                                                                                |
+| **NFR8**  | Reliability & Data Integrity   | The system must perform automated daily backups of all critical data, with each backup retained for 30 days, weekly backups for 3 months, and monthly backups for 1 year. |
+| **NFR9**  | Reliability & Data Integrity   | In case of a system failure, recovery must be possible within 1 hour using the latest successful daily backup, with a maximum data loss window of 24 hours.               |
+| **NFR10** | UX & Localization              | The user interface should be intuitive and support both desktop and mobile devices.                                                                                       |
+| **NFR11** | UX & Localization              | The system should provide clear feedback for all successful and failed user actions.                                                                                      |
+| **NFR12** | Architecture & Maintainability | The system’s architecture should support adding new features (e.g., loyalty programs) with minimal code changes.                                                          |
+| **NFR13** | Architecture & Maintainability | The codebase should follow clean code and layered architecture principles, ensuring modularity and maintainability.                                                       |
+| **NFR14** | Performance & Scalability      | The system should support horizontal scaling to handle increased user demand.                                                                                             |
+| **NFR15** | UX & Localization              | The system should support multiple languages (e.g., English, Ukrainian).                                                                                                  |
+| **NFR16** | UX & Localization              | All date and time data must be stored in UTC and displayed according to the user’s local timezone.                                                                        |

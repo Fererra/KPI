@@ -36,11 +36,7 @@ usecase "UC23. Schedule sessions" as UC23
 usecase "UC24. View all bookings" as UC24
 usecase "UC25. View booking statuses" as UC25
 
-usecase "UC26. Validate hall number and capacity uniqueness" as UC26
-usecase "UC27. Prevent overlapping showtimes in the same hall" as UC27
-usecase "UC28. Prevent double-booking of the same seat for the same showtime" as UC28
-usecase "UC29. Calculate total price" as UC29
-usecase "UC30. Release seats" as UC30
+usecase "UC26. Release seats" as UC26
 
 A --> UC21
 A --> UC22
@@ -71,22 +67,17 @@ UC4 ..> UC22 : <<include>>
 UC5 ..> UC4 : <<include>>
 UC5 ..> UC22 : <<include>>
 UC12 ..> UC5 : <<include>>
-UC12 ..> UC28 : <<include>>
-UC12 ..> UC29 : <<include>>
 UC13 ..> UC9 : <<include>>
-UC15 ..> UC29 : <<include>>
 UC16 ..> UC9 : <<include>>
 UC16 ..> UC13 : <<include>>
 UC17 ..> UC14 : <<include>>
 UC18 ..> UC9 : <<include>>
 UC19 ..> UC9 : <<include>>
 UC19 ..> UC18 : <<include>>
-UC19 ..> UC30 : <<include>>
+UC19 ..> UC26 : <<include>>
 UC20 ..> UC9 : <<include>>
 UC20 ..> UC19 : <<include>>
 
-UC22 ..> UC26 : <<include>>
-UC23 ..> UC27 : <<include>>
 UC25 ..> UC24 : <<include>>
 
 UC6 <|-- UC7 : <<extend>>
