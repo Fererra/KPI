@@ -4,8 +4,9 @@ participant UI
 participant BookingController as BC
 participant BookingService as BS
 participant SeatsService as SS
-database DB
 participant PaymentService as PS
+participant PaymentGateway as PG
+database DB
 
 User -> UI : 1. Select seats and press "Book"
 activate UI
@@ -17,9 +18,7 @@ activate BS
 BS -> SS : 4. checkAvailability(seatsId, showtimeId)
 activate SS
 SS -> DB : 5. queryFreeSeats(showtimeId)
-activate DB
 DB --> SS : 6. Free seats
-deactivate DB
 SS --> BS : 7. available = true/false
 deactivate SS
 
@@ -28,23 +27,25 @@ alt seats are available
     activate SS
     SS -> DB : 9.1. markSeatsAsReserved(seatsId, showtimeId)
 
-    activate DB
     DB --> SS : 10.1. ok
     SS --> BS : 11.1. Reserved seats
     deactivate SS
 
     BS -> DB : 12.1. saveBooking(bookingEntity)
     DB --> BS : 13.1. Booking saved
-    deactivate DB
 
     BS -> PS : 14.1. initiatePayment(bookingId, paymentInfo)
     activate PS
-    PS --> BS : 15.1. Payment session
+    PS -> PG : 15.1. createPaymentSession(bookingId, paymentInfo)
+    activate PG
+    PG --> PS : 16.1. Payment link
+    deactivate PG
+    PS --> BS : 17.1. Payment link
     deactivate PS
 
-    BS --> BC : 16.1. Payment link
-    BC -> UI : 17.1. Payment link
-    UI -> User : 18.1. displayPaymentPage(link)
+    BS --> BC : 18.1. Payment link
+    BC --> UI : 19.1. Payment link
+    UI -> User : 20.1. displayPaymentButton(link)
 else seats aren't available
     BS --> BC : 8.2. Selected seats are no longer available
     deactivate BS
