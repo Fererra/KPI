@@ -14,11 +14,12 @@ UI -> BC : 2. bookSeats(request)
 activate BC
 BC -> BS : 3. createBooking(userId, seatsId, showtimeId)
 activate BS
-
 BS -> SS : 4. checkAvailability(seatsId, showtimeId)
 activate SS
 SS -> DB : 5. queryFreeSeats(showtimeId)
+activate DB
 DB --> SS : 6. Free seats
+deactivate DB
 SS --> BS : 7. available = true/false
 deactivate SS
 
@@ -26,14 +27,15 @@ alt seats are available
     BS -> SS : 8.1. reserveSeats(seatsId, showtimeId)
     activate SS
     SS -> DB : 9.1. markSeatsAsReserved(seatsId, showtimeId)
-
+    activate DB
     DB --> SS : 10.1. ok
+    deactivate DB
     SS --> BS : 11.1. Reserved seats
     deactivate SS
-
     BS -> DB : 12.1. saveBooking(bookingEntity)
+    activate DB
     DB --> BS : 13.1. Booking saved
-
+    deactivate DB
     BS -> PS : 14.1. initiatePayment(bookingId, paymentInfo)
     activate PS
     PS -> PG : 15.1. createPaymentSession(bookingId, paymentInfo)
@@ -42,7 +44,6 @@ alt seats are available
     deactivate PG
     PS --> BS : 17.1. Payment link
     deactivate PS
-
     BS --> BC : 18.1. Payment link
     BC --> UI : 19.1. Payment link
     UI -> User : 20.1. displayPaymentButton(link)

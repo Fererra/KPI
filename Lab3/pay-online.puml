@@ -19,14 +19,15 @@ deactivate UI
 PG -> PS : 7. sendPaymentCallback(bookingId, transactionId, status)
 deactivate PG
 activate PS
-
 PS -> PS : 8. verifyPayment(transactionId)
 
 alt payment success
     PS -> BS : 9.1. updateBookingStatus(bookingId, "PAID")
     activate BS
     BS -> DB : 10.1. setBookingStatus(bookingId, "PAID")
+    activate DB
     DB --> BS : 11.1. ok
+    deactivate DB
     BS --> PS : 12.1. booking confirmed
     deactivate BS
 else payment failed or expired
@@ -35,15 +36,19 @@ else payment failed or expired
     BS -> SS : 10.2. releaseSeats(bookingId)
     activate SS
     SS -> DB : 11.2. releaseSeats(bookingId)
+    activate DB
     DB --> SS : 12.2. ok
+    deactivate DB
     SS --> BS : 13.2. ok
     deactivate SS
     BS -> DB : 14.2. setBookingStatus(bookingId, "CANCELLED")
+    activate DB
     DB --> BS : 15.2. ok
+    deactivate DB
     BS --> PS : 16.2. booking cancelled
-    deactivate PS
     deactivate BS
 end
 
+deactivate PS
 destroy PS
 @enduml
