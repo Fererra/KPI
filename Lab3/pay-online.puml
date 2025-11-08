@@ -13,36 +13,37 @@ UI -> User : 2. Redirect to payment page
 activate PG
 User -> PG : 3. Enter payment details and confirm
 PG -> PG : 4. Process transaction 
-PG -> PS : 5. sendPaymentCallback(bookingId, transactionId, status)
+PG -> UI : 5. Redirect with status (success / fail)
+UI -> User : 6. displayPaymentResult(info)
+deactivate UI
+PG -> PS : 7. sendPaymentCallback(bookingId, transactionId, status)
+deactivate PG
 activate PS
 
-PS -> PS : 6. verifyPayment(transactionId)
+PS -> PS : 8. verifyPayment(transactionId)
 
 alt payment success
-    PS -> BS : 7.1. updateBookingStatus(bookingId, "PAID")
+    PS -> BS : 9.1. updateBookingStatus(bookingId, "PAID")
     activate BS
-    BS -> DB : 8.1. setBookingStatus(bookingId, "PAID")
-    DB --> BS : 9.1. ok
-    BS --> PS : 10.1. booking confirmed
+    BS -> DB : 10.1. setBookingStatus(bookingId, "PAID")
+    DB --> BS : 11.1. ok
+    BS --> PS : 12.1. booking confirmed
     deactivate BS
 else payment failed or expired
-    PS -> BS : 7.2. cancelBooking(bookingId)
+    PS -> BS : 9.2. cancelBooking(bookingId)
     activate BS
-    BS -> SS : 8.2. releaseSeats(bookingId)
+    BS -> SS : 10.2. releaseSeats(bookingId)
     activate SS
-    SS -> DB : 9.2. releaseSeats(bookingId)
-    DB --> SS : 10.2. ok
-    SS --> BS : 11.2. ok
+    SS -> DB : 11.2. releaseSeats(bookingId)
+    DB --> SS : 12.2. ok
+    SS --> BS : 13.2. ok
     deactivate SS
-    BS -> DB : 12.2. setBookingStatus(bookingId, "CANCELLED")
-    DB --> BS : 13.2. ok
-    BS --> PS : 14.2. booking cancelled
+    BS -> DB : 14.2. setBookingStatus(bookingId, "CANCELLED")
+    DB --> BS : 15.2. ok
+    BS --> PS : 16.2. booking cancelled
     deactivate PS
     deactivate BS
 end
 
-PG -> UI : 15. Redirect with status (success / fail)
-deactivate PG
-UI -> User : 16. displayPaymentResult(info)
-deactivate UI
+destroy PS
 @enduml
