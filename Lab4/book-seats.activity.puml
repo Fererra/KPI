@@ -1,0 +1,67 @@
+@startuml
+title Book seats
+|User|
+start
+
+:View schedule;
+:Select movie and session;
+:View hall;
+:Select seats;
+:Send "Selected seats";
+
+|System|
+:Validate seats;
+if (Seat are taken?) then (no)
+  fork
+    :Reserve seats temporarily;
+  fork again
+    :Start 15-min hold timer;
+    :Send signal "Timeout";
+  end fork
+else (yes)
+  :Send "Seat not available";
+  |User|
+  --> back to "View hall";
+endif
+
+|User|
+:Confirm booking;
+
+|System|
+:Request payment form;
+
+|Payment Gateway|
+:Generate payment form;
+
+|User|
+:Enter payment details;
+
+|Payment Gateway|
+:Accept payment details;
+:Process transaction;
+:Send signal "Payment status";
+
+|System|
+:Accept signal "Payment status";
+if (Fail OR Timeout?) then (yes)
+  :Update booking status = Failed;
+  :Release seats;
+  :Send signal "Payment failed";
+else (Success)
+  :Cancel timer;
+  :Update booking status = Success;
+  :Generate e-tickets;
+  :Send signal "e-tickets";
+endif
+
+|User|
+if (Signal received?) then (fail)
+  :Accept signal "Payment failed";
+  :Receive payment fail;
+  -->  back to "View hall";
+else (ticket)
+  :Accept signal "e-tickets";
+  :Recieve e-tickets;
+  stop
+endif
+@enduml
