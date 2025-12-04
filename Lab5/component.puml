@@ -1,0 +1,154 @@
+@startuml
+
+frame "UI" as UI {
+    
+    package "Components" as UI_COMP {
+
+    }
+    
+    package "Pages" as UI_PAGES {
+        component [Auth Page]
+        component [Movie Page]
+        component [Showtime Page]
+        component [Booking Page]
+        component [Admin Page]
+        component [User Page]
+    }
+
+    package "Stores" as UI_STORES {
+        component [Auth Store]
+        component [Movie Store]
+        component [Showtime Store]
+        component [Hall Store]
+        component [Booking Store]
+        component [User Store]
+    }
+
+    package "API" as UI_API {
+        component [Auth API]
+        component [Movie API]
+        component [Showtime API]
+        component [Hall API]
+        component [Booking API]
+        component [User API]
+    }
+    
+    UI_PAGES -() UI_COMP
+    UI_PAGES -() UI_STORES
+    UI_STORES -() UI_API
+
+    database "Local Storage" as LocalStorage
+    interface "LocalStorage Interface" as I_Storage
+    UI_STORES -() I_Storage
+    I_Storage -() LocalStorage
+}
+
+UI_API -() "HTTP API"
+
+frame "API Gateway" as GATEWAY {
+    component [HTTP Router] as Router
+
+    frame "Modules" as MODULES {
+        component [JSON Schema Validator] as JSV
+        package "Auth Module" as AUTH {
+            component [Auth Controller] as AuthC
+            component [Auth Service] as AuthS
+            component [Auth Repository] as AuthR
+            AuthC -() AuthS
+            AuthS -() IAuthR
+            IAuthR -() AuthR
+        }
+
+        package "Booking Module" as BOOKING {
+            component [Booking Controller] as BookingC
+            component [Booking Service] as BookingS
+            component [Booking Repository] as BookingR
+            BookingC -() BookingS
+            BookingS -() IBookingR
+            IBookingR -() BookingR
+        }
+        
+        package "Movie Module" as MOVIE {
+            component [Movie Controller] as MovieC
+            component [Movie Service] as MovieS
+            component [Movie Repository] as MovieR
+            MovieC -() MovieS
+            MovieS -() IMovieR
+            IMovieR -() MovieR
+        }
+        
+        package "Seat Module" as SEAT {
+            component [Seat Service] as SeatS
+            component [Seat Repository] as SeatR
+            SeatS -() ISeatR
+            ISeatR -() SeatR
+        }
+        
+        package "User Module" as USER {
+            component [User Controller] as UserC
+            component [User Service] as UserS
+            component [User Repository] as UserR
+            UserC -() UserS
+            UserS -() IUserR
+            IUserR -() UserR
+
+        }
+
+        package "Showtime Module" as SHOWTIME {
+            component [Showtime Controller] as ShowtimeC
+            component [Showtime Service] as ShowtimeS
+            component [Showtime Repository] as ShowtimeR
+            ShowtimeC -() ShowtimeS
+            ShowtimeS -() IShowtimeR
+            IShowtimeR -() ShowtimeR
+        }
+        
+        Router -() "Validator"
+        "Validator" -() JSV
+
+        Router -() "Entrypoint config"
+        "Entrypoint config" -() AuthC
+        "Entrypoint config" -() BookingC
+        "Entrypoint config" -() MovieC
+        "Entrypoint config" -() UserC
+        "Entrypoint config" -() ShowtimeC
+
+        Router -() "AuthAPI" 
+        "AuthAPI" -() AuthS
+
+        AuthS -() UserAPI
+        UserAPI -() UserS
+        MovieS -() MovieAPI
+        MovieAPI -() ShowtimeS
+        ShowtimeS -() SeatAPI
+        SeatAPI -() SeatS
+        BookingS -() SeatAPI
+        BookingS -() UserAPI
+        BookingS -() ShowtimeAPI
+    }
+
+    component [DB Connection Pool] as DBCONN
+    "DB Connection" -() DBCONN
+    AuthR -() "DB Connection"
+    BookingR -() "DB Connection"
+    MovieR -() "DB Connection"
+    SeatR -() "DB Connection"
+    UserR -() "DB Connection"
+    ShowtimeR -() "DB Connection"
+}
+
+component "Email Service" as EService
+EService -() "Email API" 
+"Email API" -() AuthS
+"Email API" -() BookingS
+
+component "Payment Service" as PService
+PService -() "Payment API" 
+"Payment API" -() BookingS
+
+database "PostgreSQL" as DATABASE
+
+DBCONN -() "DB"
+"DB" -() DATABASE
+
+"HTTP API" -() Router
